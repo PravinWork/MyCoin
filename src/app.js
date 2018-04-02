@@ -2,6 +2,11 @@ import express from "express";
 import bodyParser from "body-parser";
 import rp from 'request-promise'
 
+import * as http from 'http';
+import * as url from 'url';
+import * as fs from 'fs';
+import * as path from 'path';
+
 import cors from "./config/cors";
 
 import { Blockchain, Transaction, Block } from "./blockchain";
@@ -140,6 +145,25 @@ const updateBlockchain = (req, res) => {
 const getBalance = (req, res) => {
     res.json({ balance: codeCoin.getBalanceOfAddress(req.params.address) })
 }
+
+var filename = "index.html";
+
+blockchain.get("/", function(request,response){
+    var mimeTypes = {
+     "html": "text/html",
+     "jpeg": "image/jpeg",
+     "jpg": "image/jpeg",
+     "png": "image/png",
+     "js": "text/javascript",
+     "css": "text/css"};
+
+    var pathname = url.parse(request.url).pathname;
+    fs.accessSync(filename, fs.F_OK);
+    var fileStream = fs.createReadStream(filename);
+    var mimeType = mimeTypes[path.extname(filename).split(".")[1]];
+    response.writeHead(200, {'Content-Type':mimeType});
+    fileStream.pipe(response);
+});
 
 blockchain.get("/blockchain", retrieveBlockchain);
 blockchain.get("/blockchain/resolve", resolveBlockchain);
