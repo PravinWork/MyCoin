@@ -6,3 +6,7 @@
 3. Other nodes can be added in the same way with a different port: `PORT=5001 npm start`.
 4. As gossiping (the addition of a new node) is not yet implemented, we have to register each node manually using Postman.
 
+to register node : http://localhost:5000/nodes
+
+
+
